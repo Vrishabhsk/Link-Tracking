@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import image from "../icons/coding.png";
 import errorImage from "../icons/error.jpg";
+import { toast } from "react-toastify";
 
 export default function LinkCrPage() {
   const { username, linkName } = useParams();
@@ -27,7 +28,9 @@ export default function LinkCrPage() {
         ip: respon.data.ip,
         country: respon.data.country,
         linkName: linkName,
-      });
+      }).then(() => {
+        toast.success("data stored");
+      })
     }
   };
 
