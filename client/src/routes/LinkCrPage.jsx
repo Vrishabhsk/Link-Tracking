@@ -8,11 +8,15 @@ export default function LinkCrPage() {
   const { username, linkName } = useParams();
   const [avail, setAvail] = useState(false);
 
+  useEffect(() => {
+    checkAvail();
+    //eslint-disable-next-line
+  }, []);
+
   const checkAvail = async () => {
     const res = await axios.get(`/data/${username}/${linkName}`);
-    console.log(res.data);
-    setAvail(res.data);
-    if (res.data === true) {
+    if (res.data) {
+      setAvail(res.data);
       const resp = await axios.get(
         `http://api.userstack.com/api/detect?access_key=b38a778400d8940f6a42af5931c4810e&ua=${navigator.userAgent}`
       );
@@ -26,11 +30,6 @@ export default function LinkCrPage() {
       });
     }
   };
-
-  useEffect(() => {
-    checkAvail();
-    //eslint-disable-next-line
-  }, []);
 
   return (
     <div className="linkCr">

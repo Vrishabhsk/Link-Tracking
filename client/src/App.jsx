@@ -40,7 +40,7 @@ function App() {
 
   useEffect(() => {
     checkAuth(); //eslint-disable-next-line
-  });
+  },[auth]);
 
   return (
     <Router>
