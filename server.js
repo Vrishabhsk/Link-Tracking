@@ -42,6 +42,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
 }
 
+app.use(express.static(path.join(__dirname, "client/build")));
 mongoose.connect(
   process.env.URI,
   {
@@ -145,7 +146,7 @@ app.get("/data/:username/:linkName", (req, res) => {
 });
 
 //---------------store visitor details-----------------------------------
-app.post("/api/data", (req, res) => {
+app.post("/getTraffic", (req, res) => {
   var today = new Date()
     .toLocaleDateString("en-GB", {
       day: "numeric",

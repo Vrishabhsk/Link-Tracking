@@ -22,7 +22,7 @@ export default function LinkCrPage() {
         `http://api.userstack.com/api/detect?access_key=b38a778400d8940f6a42af5931c4810e&ua=${navigator.userAgent}`
       );
       const respon = await axios.get("https://api.country.is");
-      axios.post("/api/data", {
+      axios.post("/getTraffic", {
         device: resp.data.os.name,
         browser: resp.data.browser.name,
         ip: respon.data.ip,
