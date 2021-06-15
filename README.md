@@ -20,4 +20,4 @@ Cookies/Session   : Cookie-Parser/Express-Session
 5 -> open 2 terminal, on one run the command nodemon server.js and on another run npm start and voila
 ```
 ## Live Site:
-[https://link-tracking.herokuapp.com/](https://link-tracking.herokuapp.com/)
+[http://link-tracking.herokuapp.com/](http://link-tracking.herokuapp.com/)
