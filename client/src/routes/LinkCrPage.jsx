@@ -10,28 +10,34 @@ export default function LinkCrPage() {
   const [avail, setAvail] = useState(false);
 
   useEffect(() => {
-    checkAvail();
+    setAvail(checkAvail());
+    setTimeout(() => {
+      sendData();
+    }, 1000);
     //eslint-disable-next-line
   }, []);
 
   const checkAvail = async () => {
     const res = await axios.get(`/data/${username}/${linkName}`);
-    if (res.data) {
-      setAvail(res.data);
-      const resp = await axios.get(
-        `http://api.userstack.com/api/detect?access_key=b38a778400d8940f6a42af5931c4810e&ua=${navigator.userAgent}`
-      );
-      const respon = await axios.get("https://api.country.is");
-      axios.post("/getTraffic", {
+    return res.data;
+  };
+
+  const sendData = async () => {
+    const resp = await axios.get(
+      `http://api.userstack.com/api/detect?access_key=b38a778400d8940f6a42af5931c4810e&ua=${navigator.userAgent}`
+    );
+    const respon = await axios.get("https://api.country.is");
+    axios
+      .post("/getTraffic", {
         device: resp.data.os.name,
         browser: resp.data.browser.name,
         ip: respon.data.ip,
         country: respon.data.country,
         linkName: linkName,
-      }).then(() => {
-        toast.success("data stored");
       })
-    }
+      .then(() => {
+        toast.success("data stored");
+      });
   };
 
   return (
