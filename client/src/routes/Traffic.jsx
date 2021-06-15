@@ -32,7 +32,7 @@ export default function Traffic() {
               <h4 className="grid-line">{person.lastVisit}</h4>
               <h4 className="grid-line">{person.totalVisits}</h4>
               <h4 className="grid-line">{person.country}</h4>
-              <h4 className="grid-line">{person.device}</h4>
+              <h4 className="grid-line">{person.browser} on {person.device}</h4>
             </>
           );
         })}
