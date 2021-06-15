@@ -31,7 +31,7 @@ export default function Create(props) {
     if (link.linkName === "" || link.linkDes === "") {
       toast.warning("Missing Credentials");
     } else {
-      const urlGen = `https://link-tracking.herokuapp.com/${
+      const urlGen = `http://link-tracking.herokuapp.com/${
         props.user.username
       }/${_.kebabCase(link.linkName)}`;
       axios({
