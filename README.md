@@ -20,12 +20,5 @@ API for Traffic   : userstack.com
 4 -> change proxy in package.json in client folder to http://localhost:(your server port)
 5 -> open 2 terminal, on one run the command nodemon server.js and on another run npm start and voila
 ```
-## IMP : For recording the data when the site is visited:
-```
-Have to allow insecure content in the site settings as the api being used is in http mode
-so if the site does not allow insecure content the data of the user won't be stored
-This is because the api that im using is userstack.com api as their free tier offers only http mode.
-*** do this when the landing page has rendered!
-```
 ## Live Site:
-[http://link-tracking.herokuapp.com/](http://link-tracking.herokuapp.com/)
+[https://link-tracking.herokuapp.com/](https://link-tracking.herokuapp.com/)
