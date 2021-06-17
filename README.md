@@ -10,7 +10,7 @@ Styled Components : Material-UI
 Requests (React)  : Axios
 Authentication    : Passport.JS
 Cookies/Session   : Cookie-Parser/Express-Session
-API for Traffic   : userstack.com
+Store Traffic     : react-device-detect (NPM)
 ```
 ## To Run on Local Machine:
 ```
