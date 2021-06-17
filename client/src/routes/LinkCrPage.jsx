@@ -4,7 +4,7 @@ import axios from "axios";
 import image from "../icons/coding.png";
 import errorImage from "../icons/error.jpg";
 import { toast } from "react-toastify";
-import { osName, browserName } from "react-device-detect";
+import { osName, browserName, osVersion } from "react-device-detect";
 
 export default function LinkCrPage() {
   const { username, linkName } = useParams();
@@ -27,7 +27,7 @@ export default function LinkCrPage() {
     const res = await axios.get("https://api.country.is");
     axios
       .post("/getTraffic", {
-        device: osName,
+        device: `${osName} ${osVersion}`,
         browser: browserName,
         ip: res.data.ip,
         country: res.data.country,
