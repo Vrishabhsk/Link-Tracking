@@ -70,11 +70,7 @@ export default function Create(props) {
         />
         <br />
         <div>
-<<<<<<< HEAD
           URL generated: https://link-tracking.herokuapp.com/{props.user.username}/
-=======
-          URL generated: http://link-tracking.herokuapp.com/{props.user.username}/
->>>>>>> e41692af0d164efae8326fc7a530a05a37a8ee0e
           {_.kebabCase(link.linkName)}
         </div>
         <br />
