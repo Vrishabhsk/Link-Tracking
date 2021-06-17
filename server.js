@@ -105,7 +105,7 @@ app.get("/user", (req, res) => {
 
 //-------------------creating a new link by the user--------------------
 app.post("/api/create", (req, res) => {
-  Link.findOne({ linkName: req.body.linkName }, (err, link) => {
+  Link.findOne({ urlGen: req.body.url }, (err, link) => {
     if (err) throw err;
     if (link) res.send("Link Already Exists");
     if (!link) {
@@ -113,7 +113,6 @@ app.post("/api/create", (req, res) => {
         linkName: req.body.linkName,
         linkDes: req.body.linkDes,
         urlGen: req.body.url,
-        linkCheck: req.body.linkName.toLowerCase(),
         createDate: new Date().toLocaleString(),
       });
       link.save((err) => {
@@ -136,7 +135,10 @@ app.get("/data/:username/:linkName", (req, res) => {
     .exec((err, links) => {
       var flag = false;
       links[0].userLinks.forEach((link) => {
-        if (link.linkCheck === linkName.replace(/-/g, " ")) {
+        if (
+          link.urlGen ===
+          `https://link-tracking.herokuapp.com/${username}/${linkName}`
+        ) {
           flag = true;
         }
       });
@@ -159,7 +161,7 @@ app.post("/getTraffic", (req, res) => {
   //if ip exists edit,
   //if not create new user ip
   //if not create a new user for that link
-  Traffic.find({ link: req.body.linkName }, (err, result) => {
+  Traffic.find({ link: req.body.link }, (err, result) => {
     if (err) throw err;
     if (result) {
       var flag = false;
@@ -176,7 +178,7 @@ app.post("/getTraffic", (req, res) => {
       if (!flag) {
         const newTraf = new Traffic({
           uuid: uuidv4(),
-          link: req.body.linkName,
+          link: req.body.link,
           ipAdd: req.body.ip,
           country: req.body.country,
           firstVisit: today,
@@ -187,22 +189,19 @@ app.post("/getTraffic", (req, res) => {
         });
         newTraf.save((err) => {
           if (err) throw err;
-          Link.findOne(
-            { linkCheck: req.body.linkName.replace(/-/g, " ") },
-            (err, link) => {
-              link.linkData.push(newTraf);
-              link.save((err) => {
-                if (err) throw err;
-              });
-            }
-          );
+          Link.findOne({ urlGen: req.body.link }, (err, link) => {
+            link.linkData.push(newTraf);
+            link.save((err) => {
+              if (err) throw err;
+            });
+          });
         });
       }
     }
     if (!result) {
       const newTraf = new Traffic({
         uuid: uuidv4(),
-        link: req.body.linkName,
+        link: req.body.link,
         ipAdd: req.body.ip,
         country: req.body.country,
         firstVisit: today,
@@ -213,15 +212,12 @@ app.post("/getTraffic", (req, res) => {
       });
       newTraf.save((err) => {
         if (err) throw err;
-        Link.findOne(
-          { linkCheck: req.body.linkName.replace(/-/g, " ") },
-          (err, link) => {
-            link.linkData.push(newTraf);
-            link.save((err) => {
-              if (err) throw err;
-            });
-          }
-        );
+        Link.findOne({ urlGen: req.body.link }, (err, link) => {
+          link.linkData.push(newTraf);
+          link.save((err) => {
+            if (err) throw err;
+          });
+        });
       });
     }
   });

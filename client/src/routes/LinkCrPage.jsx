@@ -4,6 +4,7 @@ import axios from "axios";
 import image from "../icons/coding.png";
 import errorImage from "../icons/error.jpg";
 import { toast } from "react-toastify";
+import { osName, browserName } from "react-device-detect";
 
 export default function LinkCrPage() {
   const { username, linkName } = useParams();
@@ -23,17 +24,14 @@ export default function LinkCrPage() {
   };
 
   const sendData = async () => {
-    const resp = await axios.get(
-      `http://api.userstack.com/api/detect?access_key=b38a778400d8940f6a42af5931c4810e&ua=${navigator.userAgent}`
-    );
-    const respon = await axios.get("https://api.country.is");
+    const res = await axios.get("https://api.country.is");
     axios
       .post("/getTraffic", {
-        device: resp.data.os.name,
-        browser: resp.data.browser.name,
-        ip: respon.data.ip,
-        country: respon.data.country,
-        linkName: linkName,
+        device: osName,
+        browser: browserName,
+        ip: res.data.ip,
+        country: res.data.country,
+        link: `https://link-tracking.herokuapp.com/${username}/${linkName}`,
       })
       .then(() => {
         toast.success("data stored");
