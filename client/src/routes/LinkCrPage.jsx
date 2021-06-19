@@ -11,16 +11,16 @@ export default function LinkCrPage() {
   const [avail, setAvail] = useState(false);
 
   useEffect(() => {
-    setAvail(checkAvail());
-    setTimeout(() => {
-      if (checkAvail()) sendData();
-    }, 1000);
+    checkAvail();
     //eslint-disable-next-line
   }, []);
 
   const checkAvail = async () => {
     const res = await axios.get(`/data/${username}/${linkName}`);
-    return res.data;
+    setAvail(res.data);
+    if (res.data) {
+      sendData();
+    }
   };
 
   const sendData = async () => {
