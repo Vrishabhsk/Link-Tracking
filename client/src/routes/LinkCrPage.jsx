@@ -12,9 +12,7 @@ export default function LinkCrPage() {
 
   useEffect(() => {
     setAvail(checkAvail());
-    setTimeout(() => {
-      sendData();
-    }, 1000);
+    if (avail) sendData();
     //eslint-disable-next-line
   }, []);
 
