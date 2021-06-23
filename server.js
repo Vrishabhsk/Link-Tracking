@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://link-tracking.herokuapp.com",
     credentials: true,
   })
 );
@@ -147,79 +147,36 @@ app.get("/data/:username/:linkName", (req, res) => {
 });
 
 //---------------store visitor details-----------------------------------
-app.post("/getTraffic", (req, res) => {
-  var today = new Date()
-    .toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })
-    .split(" ")
-    .join("-");
-  //check if link Traffic exist,
-  //if exist then check if ip of users exists with that link,
-  //if ip exists edit,
-  //if not create new user ip
-  //if not create a new user for that link
-  Traffic.find({ link: req.body.link }, (err, result) => {
+app.post("/setTraffic", (req, res) => {
+  const newTraffic = new Traffic({
+    uuid: uuidv4(),
+    link: req.body.link,
+    cookieName: req.body.cookieName,
+    country: req.body.country,
+    firstVisit: new Date().toLocaleString(),
+    lastVisit: new Date().toLocaleString(),
+    totalVisits: 1,
+    browser: req.body.browser,
+    device: req.body.device,
+  });
+  newTraffic.save((err) => {
     if (err) throw err;
-    if (result) {
-      var flag = false;
-      result.forEach((element) => {
-        if (element.ipAdd === req.body.ip) {
-          element.lastVisit = today;
-          element.totalVisits += 1;
-          flag = true;
-          element.save((err) => {
-            if (err) throw err;
-          });
-        }
-      });
-      if (!flag) {
-        const newTraf = new Traffic({
-          uuid: uuidv4(),
-          link: req.body.link,
-          ipAdd: req.body.ip,
-          country: req.body.country,
-          firstVisit: today,
-          lastVisit: today,
-          totalVisits: 1,
-          browser: req.body.browser,
-          device: req.body.device,
-        });
-        newTraf.save((err) => {
-          if (err) throw err;
-          Link.findOne({ urlGen: req.body.link }, (err, link) => {
-            link.linkData.push(newTraf);
-            link.save((err) => {
-              if (err) throw err;
-            });
-          });
-        });
-      }
-    }
-    if (!result) {
-      const newTraf = new Traffic({
-        uuid: uuidv4(),
-        link: req.body.link,
-        ipAdd: req.body.ip,
-        country: req.body.country,
-        firstVisit: today,
-        lastVisit: today,
-        totalVisits: 1,
-        browser: req.body.browser,
-        device: req.body.device,
-      });
-      newTraf.save((err) => {
+    Link.findOne({ urlGen: req.body.link }, (err, link) => {
+      link.linkData.push(newTraffic);
+      link.save((err) => {
         if (err) throw err;
-        Link.findOne({ urlGen: req.body.link }, (err, link) => {
-          link.linkData.push(newTraf);
-          link.save((err) => {
-            if (err) throw err;
-          });
-        });
       });
-    }
+    });
+  });
+});
+
+app.post("/updTraffic", (req, res) => {
+  Traffic.findOne({ cookieName: req.body.cookieName }, (err, ans) => {
+    ans.lastVisit = new Date().toLocaleString();
+    ans.totalVisits += 1;
+    ans.save((err) => {
+      if (err) throw err;
+    });
   });
 });
 
@@ -246,7 +203,7 @@ app.get("/api/:id", (req, res) => {
 });
 
 //--------------------catch all method-----------------------------------
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "client/build/index.html"));
 });
 

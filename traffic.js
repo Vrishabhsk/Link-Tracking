@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const traffic = new mongoose.Schema({
   uuid: String,
   link: String,
-  ipAdd: String,
+  cookieName: String,
   country: String,
   firstVisit: String,
   lastVisit: String,
