@@ -20,7 +20,7 @@ export default function LinkCrPage() {
     const res = await axios.get(`/data/${username}/${linkName}`);
     setAvail(res.data);
     if (res.data) {
-      if (cookies.get("user") === "undefined") {
+      if (cookies.get("user") === undefined) {
         cookies.set("user", "LinkCookie", { path: `/${username}/${linkName}` });
         sendData(true);
       }
