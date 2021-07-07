@@ -5,6 +5,7 @@ import image from "../icons/coding.png";
 import errorImage from "../icons/error.jpg";
 import { osName, browserName, osVersion } from "react-device-detect";
 import Cookies from "universal-cookie";
+import { v4 as uuidv4 } from "uuid";
 
 export default function LinkCrPage() {
   const { username, linkName } = useParams();
@@ -21,10 +22,13 @@ export default function LinkCrPage() {
     setAvail(res.data);
     if (res.data) {
       if (cookies.get("user") === undefined) {
-        cookies.set("user", "LinkCookie", { path: `/${username}/${linkName}` });
+        const id = uuidv4();
+        console.log(id);
+        cookies.set("user", `LinkCookie-${id}`, {
+          path: `/${username}/${linkName}`,
+        });
         sendData(true);
-      }
-      else sendData(false);
+      } else sendData(false);
     }
   };
 
